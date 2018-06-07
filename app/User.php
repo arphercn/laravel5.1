@@ -37,6 +37,46 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+
+    /**
+     * 应该被调整为日期的属性
+     *
+     * example
+     * echo $user->disabled_at->getTimestamp();
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'disabled_at'];
+
+    /**
+     * 获取用户的名字
+     *
+        $user = User::find(1);
+        return $firstName = $user->first_name;
+        $user->save();
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFirstNameAttribute()
+    {
+        return ucfirst($this->attributes['name']);
+    }
+
+    /**
+     * 设置用户的名字
+     *
+        $user->first_name = 'bbBBcc';
+        $user->save();
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
+
     public function account()
     {
         return $this->hasOne('App\Models\UserAccount');

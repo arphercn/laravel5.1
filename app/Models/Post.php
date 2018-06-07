@@ -6,6 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+
+    /**
+     * 保存为json，打印为数组
+     *
+        $post = Post::find(1);
+        //        $post->addition = ['width'=>100, 'length'=>200];
+        //        $post->save();
+     *
+        return dd($post->addition);  // array
+     *
+     * @var array
+     */
+    protected $casts = [
+        'addition' => 'array',
+    ];
+
     //
     public function author()
     {

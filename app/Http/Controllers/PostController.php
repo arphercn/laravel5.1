@@ -18,6 +18,11 @@ class PostController extends Controller
      */
     public function index()
     {
+
+    }
+
+    public function posts()
+    {
         // 获取所有至少有一条评论的文章...
         $posts = Post::has('comments')->get();
 
