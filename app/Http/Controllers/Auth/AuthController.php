@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -22,6 +24,20 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    /**
+     * 登录后跳转路由
+     *
+     * @var string
+     */
+    protected $redirectPath = '/user/profile';
+
+    /**
+     * 登录名字段，默认email
+     *
+     * @var string
+     */
+//    protected $username = 'name';
 
     /**
      * Create a new authentication controller instance.
@@ -61,5 +77,24 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * 自定义处理登录认证逻辑
+     *
+     * @return Response
+     */
+    public function postLogin(Request $request)
+    {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $remember = $request->input('remember');
+
+        if (\Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
+            // 重定向到登录之前用户想要访问的URL，在目标URL无效的情况下备用URI将会传递给该方法
+            return redirect()->intended('/user/profile');
+        }
+
+        return redirect()->route('login');
     }
 }

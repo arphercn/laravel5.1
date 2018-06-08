@@ -37,6 +37,12 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * 自定义的属性添加到模型中
+     *
+     * @var array
+     */
+    protected $appends = ['is_admin', 'first_name'];
 
     /**
      * 应该被调整为日期的属性
@@ -47,6 +53,23 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'disabled_at'];
+
+
+    /**
+     * 为用户获取管理员标识
+     *
+     * @return bool
+     */
+    public function getIsAdminAttribute()
+    {
+        foreach ($this->roles as $role) {
+            if ($role->name === 'admin') {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * 获取用户的名字

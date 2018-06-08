@@ -12,6 +12,13 @@ use App\User;
 
 class UserController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -19,16 +26,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::with('roles')->first();
-        var_dump($user->toArray());  // array
-        var_dump($user->toJson());   // string
-        return $user;                // json
-
-        $users = User::all();
-        var_dump($users->toArray()); // array
-        var_dump($users->toJson());  // string
-        return $users;               // json
+        $user = User::find(2);
+        var_dump($user->is_admin);
+        return $user;
     }
+
+
+    public function profile(Request $request)
+    {
+        $user = $request->user();
+        echo $user['name'].'登录成功！';
+    }
+
+
 
     public function getAccountByUserId($id)
     {

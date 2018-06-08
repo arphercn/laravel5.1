@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 
 Route::group(['prefix' => 'user'], function () {
+    Route::get('profile', 'UserController@profile');
+
     Route::get('{id}/posts', 'UserController@getPostsByUserId');
     Route::get('{id}/account', 'UserController@getAccountByUserId');
     Route::get('{id}/roles', 'UserController@getRolesByUserId');  // 测试id 3
@@ -47,3 +49,20 @@ Route::group(['prefix' => 'tag'], function () {
     Route::get('{id}/posts', 'TagController@posts');
     Route::get('{id}/videos', 'TagController@videos');
 });
+
+
+// 认证路由...
+Route::get('auth/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+// 注册路由...
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+// 发送密码重置链接路由
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+// 密码重置路由
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset', 'Auth\PasswordController@postReset');
